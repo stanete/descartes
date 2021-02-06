@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: local
+  main:
+    banner-mode: "off"
+
+logbook:
+  exclude:
+    - /health
+    - /favicon.ico
+    - /metrics
+
+server:
+  port: 8000
+
+management:
+  endpoints:
+    web:
+      base-path: ~
+      cors:
+        allowed-origins: "*"
+        allowed-methods: GET
