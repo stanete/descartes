@@ -13,5 +13,4 @@ FROM openjdk:13-slim-buster
 WORKDIR /app
 COPY --from=builder /app/init.sh /app
 COPY --from=builder /app/build/libs/descartes-*.jar /app/
-EXPOSE 8000
 ENTRYPOINT ["sh", "init.sh"]
