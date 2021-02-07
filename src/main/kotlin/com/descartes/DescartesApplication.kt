@@ -6,6 +6,7 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class DescartesApplication
 
+@Suppress("SpreadOperator")
 fun main(args: Array<String>) {
 	runApplication<DescartesApplication>(*args)
 }

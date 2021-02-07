@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "2.4.2"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
+	id("io.gitlab.arturbosch.detekt") version "1.15.0"
 	kotlin("jvm") version "1.4.21"
 	kotlin("plugin.spring") version "1.4.21"
 }
@@ -13,7 +14,16 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
 	mavenCentral()
+	jcenter {
+		content {
+			// just allow to include kotlinx projects
+			// detekt needs 'kotlinx-html' for the html report
+			includeGroup("org.jetbrains.kotlinx")
+		}
+	}
 }
+
+val detektVersion = "1.15.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -25,6 +35,15 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
+	detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
+	detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion")
+}
+
+detekt {
+	toolVersion = detektVersion
+	input = files("./src")
+	config = files("./detekt-config.yml")
+	autoCorrect = true
 }
 
 tasks.withType<KotlinCompile> {

@@ -7,7 +7,5 @@ import org.springframework.boot.test.context.SpringBootTest
 class DescartesApplicationTests {
 
 	@Test
-	fun contextLoads() {
-	}
-
+	fun contextLoads() = assert(true)
 }
