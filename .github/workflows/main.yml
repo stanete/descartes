@@ -15,6 +15,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: "Test"
+    needs: [ "lint" ]
     steps:
       - uses: OrangeLabs-moe/gradle-actions@v5.0-openjdk-13
         with:
@@ -22,6 +23,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: "Build, Push & Deploy"
+    needs: [ "lint", "test" ]
     steps:
       - uses: actions/checkout@v2.3.4
       - uses: akhileshns/heroku-deploy@v3.10.9
