@@ -10,9 +10,6 @@ logbook:
     - /favicon.ico
     - /metrics
 
-server:
-  port: 8000
-
 management:
   endpoints:
     web:
