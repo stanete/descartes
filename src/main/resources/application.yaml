@@ -17,3 +17,6 @@ management:
       cors:
         allowed-origins: "*"
         allowed-methods: GET
+
+cloudamqp:
+  url: "amqp://guest:guest@localhost:5672"

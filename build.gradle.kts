@@ -30,6 +30,7 @@ val wiremockVersion = "2.1.1.RELEASE"
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-amqp")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -39,6 +40,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$wiremockVersion")
+	testImplementation("org.springframework.amqp:spring-rabbit-test")
 	detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
 	detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion")
 }
