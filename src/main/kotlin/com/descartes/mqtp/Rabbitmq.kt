@@ -1,12 +1,15 @@
-package com.descartes.configuration
+package com.descartes.mqtp
 
 import org.springframework.amqp.core.Queue
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 
 @Configuration
+@Profile("!test")
 class Rabbitmq(@Value("\${cloudamqp.url}") val uri: String) {
 
     @Bean
@@ -16,6 +19,9 @@ class Rabbitmq(@Value("\${cloudamqp.url}") val uri: String) {
     fun connectionFactory() = CachingConnectionFactory().apply {
         setUri(uri)
     }
+
+    @Bean
+    fun publisher(rabbitTemplate: RabbitTemplate) = Publisher(rabbitTemplate)
 
     companion object {
         const val SCRAPE_ARTICLE = "scrapeArticle"

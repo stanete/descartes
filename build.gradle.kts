@@ -26,6 +26,7 @@ repositories {
 val detektVersion = "1.15.0"
 val skrapeItVersion = "1.0.0-alpha8"
 val wiremockVersion = "2.1.1.RELEASE"
+val mockkVersion = "1.10.5"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -39,6 +40,7 @@ dependencies {
 	implementation("it.skrape:skrapeit-core:$skrapeItVersion")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
+	testImplementation("io.mockk:mockk:$mockkVersion")
 	testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$wiremockVersion")
 	testImplementation("org.springframework.amqp:spring-rabbit-test")
 	detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")

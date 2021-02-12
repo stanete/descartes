@@ -1,6 +1,6 @@
-package com.descartes
+package com.descartes.mqtp
 
-import com.descartes.configuration.Rabbitmq.Companion.SCRAPE_ARTICLE
+import com.descartes.mqtp.Rabbitmq.Companion.SCRAPE_ARTICLE
 import org.springframework.stereotype.Component
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 

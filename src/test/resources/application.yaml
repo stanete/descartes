@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: test
+  main:
+    banner-mode: "off"
+
+logbook:
+  exclude:
+    - /health
+    - /favicon.ico
+    - /metrics
+
+management:
+  endpoints:
+    web:
+      base-path: ~
+      cors:
+        allowed-origins: "*"
+        allowed-methods: GET
+
+cloudamqp:
+  url: "amqp://guest:guest@localhost:5672"
