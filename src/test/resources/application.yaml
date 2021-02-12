@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: test
   main:
     banner-mode: "off"
 
