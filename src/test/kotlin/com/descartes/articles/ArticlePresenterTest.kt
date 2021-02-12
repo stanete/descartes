@@ -1,11 +1,9 @@
-package com.descartes
+package com.descartes.articles
 
 import com.descartes.actions.CreateArticle
 import com.descartes.actions.PublishMessage
 import com.descartes.actions.ScrapeArticle
 import com.descartes.actions.UpdateArticle
-import com.descartes.articles.Article
-import com.descartes.articles.ArticlePresenter
 import com.descartes.mqtp.Message
 import io.mockk.every
 import io.mockk.mockk

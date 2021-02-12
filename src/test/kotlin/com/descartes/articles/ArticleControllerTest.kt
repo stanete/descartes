@@ -1,7 +1,9 @@
-package com.descartes
+package com.descartes.articles
 
 import com.descartes.ApiContractAssertion.Companion.assertResponse
-import com.descartes.articles.CreateArticleRequestBody
+import com.descartes.ArticleHttpStub
+import com.descartes.getStubContent
+import com.descartes.stub
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
