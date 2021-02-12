@@ -19,6 +19,7 @@ repositories {
 			// just allow to include kotlinx projects
 			// detekt needs 'kotlinx-html' for the html report
 			includeGroup("org.jetbrains.kotlinx")
+			includeGroup("org.amshove.kluent")
 		}
 	}
 }
@@ -27,6 +28,8 @@ val detektVersion = "1.15.0"
 val skrapeItVersion = "1.0.0-alpha8"
 val wiremockVersion = "2.1.1.RELEASE"
 val mockkVersion = "1.10.5"
+val kotlinResultVersion = "1.1.11"
+val kluentVersion = "1.65"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -38,10 +41,12 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("it.skrape:skrapeit-core:$skrapeItVersion")
+	implementation("com.michael-bull.kotlin-result:kotlin-result:$kotlinResultVersion")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("io.mockk:mockk:$mockkVersion")
 	testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$wiremockVersion")
+	testImplementation("org.amshove.kluent:kluent:$kluentVersion")
 	testImplementation("org.springframework.amqp:spring-rabbit-test")
 	detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
 	detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion")
