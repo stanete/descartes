@@ -1,6 +1,9 @@
-package com.descartes
+package com.descartes.articles
 
 import com.descartes.ApiContractAssertion.Companion.assertResponse
+import com.descartes.ArticleHttpStub
+import com.descartes.getStubContent
+import com.descartes.stub
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,7 +24,7 @@ class ArticleControllerTest {
     private lateinit var webTestClient: WebTestClient
 
     @Test
-    fun `When creating a new article with a url return the scraped text in plain text`() {
+    fun `When creating a new article with a url return a response with the created article`() {
         val url = "https://stanete.com/system-design-101"
         stub(
             ArticleHttpStub(

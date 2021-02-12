@@ -1,4 +1,4 @@
-package com.descartes
+package com.descartes.articles
 
 data class CreateArticleRequestBody(
     val url: String,
