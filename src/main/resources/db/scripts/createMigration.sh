@@ -41,7 +41,7 @@ function install_postgres() {
 
 function set_migration_name() {
     printf "\e[32mEnter a name for your new migration:\e[m\n"
-    read MIGRATION_NAME
+    read -r MIGRATION_NAME
 }
 
 function set_pgdump_conf() {
