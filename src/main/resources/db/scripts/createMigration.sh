@@ -45,8 +45,8 @@ function set_migration_name() {
 }
 
 function set_pgdump_conf() {
-    db_chain=`sed '/^\#/d' $GRADLE_PROPERTIES_PATH | grep 'flyway.url'  | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
-    db_user=`sed '/^\#/d' $GRADLE_PROPERTIES_PATH | grep 'flyway.user'  | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'`
+    db_chain=$(sed '/^\#/d' $GRADLE_PROPERTIES_PATH | grep 'flyway.url'  | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    db_user=$(sed '/^\#/d' $GRADLE_PROPERTIES_PATH | grep 'flyway.user'  | tail -n 1 | cut -d "=" -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
     db_name=${db_chain##*/}
 
     db_chain_nodb=$(echo $db_chain | sed -e "s/\/$db_name//g")
