@@ -24,8 +24,9 @@ port="$(echo "$host_port" | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e '
 # Extract the path.
 path="$(echo "$url" | grep / | cut -d/ -f2-)"
 
-# Init the app.
-java -Djava.security.egd=file:/dev/./urandom \
+# Init the app. First line prevents Heroku's Error R14 (Memory quota exceeded).
+java -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8 -XX:+UseContainerSupport \
+      -Djava.security.egd=file:/dev/./urandom \
       -Dserver.port=$PORT \
       -Dspring.datasource.url="jdbc:postgresql://$host:$port/$path?user=$user&password=$pass" \
       -jar /app/descartes-*.jar \
