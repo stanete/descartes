@@ -17,6 +17,17 @@ jobs:
     runs-on: ubuntu-latest
     name: "Test"
     needs: [ "lint" ]
+    services:
+      db:
+        image: postgres
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_DB: database
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        # Needed because the postgres container does not provide a health check.
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v2.3.4
       - uses: OrangeLabs-moe/gradle-actions@v5.0-openjdk-13

@@ -4,9 +4,13 @@ plugins {
 	id("org.springframework.boot") version "2.4.2"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	id("io.gitlab.arturbosch.detekt") version "1.15.0"
+	id("org.flywaydb.flyway") version "6.0.7"
 	kotlin("jvm") version "1.4.30"
 	kotlin("plugin.spring") version "1.4.30"
+	kotlin("plugin.jpa") version "1.4.21"
 }
+
+apply(plugin = "org.flywaydb.flyway")
 
 group = "com"
 version = "0.0.1-SNAPSHOT"
@@ -35,6 +39,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.flywaydb:flyway-core")
+	runtimeOnly("org.postgresql:postgresql")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -57,6 +64,19 @@ detekt {
 	input = files("./src")
 	config = files("./detekt-config.yml")
 	autoCorrect = true
+}
+
+tasks.register<Exec>("flywayCreate") {
+	group = "flyway"
+	description =
+		"Creates a new migration by using the difference between JPA model in your current branch and model " +
+			"created by migrations in main branch."
+	run {
+		standardInput = System.`in`
+		standardOutput = System.`out`
+	}
+	workingDir("./db/scripts/")
+	commandLine("./createMigration.sh")
 }
 
 tasks.withType<KotlinCompile> {
