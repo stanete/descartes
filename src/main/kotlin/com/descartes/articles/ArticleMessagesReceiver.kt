@@ -11,6 +11,7 @@ class ArticleMessagesReceiver(val presenter: ArticlePresenter) {
 
     @RabbitListener(queues = [Rabbitmq.SCRAPE_ARTICLE])
     fun scrape(message: String) {
+        println("Message read from ${Rabbitmq.SCRAPE_ARTICLE}: $message.")
         val data = jacksonObjectMapper().readValue(message, Message::class.java).data
         data["url"]?.let { presenter.scrape(it) }
     }
