@@ -3,7 +3,7 @@
 SCRIPTNAME=$(basename $0)
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 CURRENT_FOLDER=$(pwd)
-MIGRATIONS_FOLDER="../migration"
+MIGRATIONS_FOLDER="../migrations"
 GRADLE_PROPERTIES_PATH="../../gradle.properties"
 APGDIFF_PATH="./apgdiff.jar"
 ORIGIN_BRANCH="origin/main"
