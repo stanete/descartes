@@ -8,15 +8,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: "Lint & Test"
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: OrangeLabs-moe/gradle-actions@v5.0-openjdk-13
-        with:
-          args: detekt test
-  deploy:
-    runs-on: ubuntu-latest
-    name: "Build, Push & Deploy"
-    needs: [ "test" ]
     services:
       db:
         image: postgres
@@ -28,6 +19,15 @@ jobs:
           - 5432:5432
         # Needed because the postgres container does not provide a health check.
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: OrangeLabs-moe/gradle-actions@v5.0-openjdk-13
+        with:
+          args: detekt test
+  deploy:
+    runs-on: ubuntu-latest
+    name: "Build, Push & Deploy"
+    needs: [ "migrate" ]
     steps:
       - uses: actions/checkout@v2.3.4
       - uses: akhileshns/heroku-deploy@v3.10.9
