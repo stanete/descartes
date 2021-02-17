@@ -33,7 +33,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: "Build, Push & Deploy"
-    needs: [ "migrate" ]
+    needs: [ "test" ]
     steps:
       - uses: actions/checkout@v2.3.4
       - uses: akhileshns/heroku-deploy@v3.10.9
