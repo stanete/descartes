@@ -1,3 +1,12 @@
 package com.descartes.articles
 
-data class Article(val url: String, val text: String = "")
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
+
+@Entity
+@Table(name = "articles")
+data class Article(
+    @Id val url: String,
+    val content: String = ""
+)

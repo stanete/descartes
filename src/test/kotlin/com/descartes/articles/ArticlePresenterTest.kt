@@ -36,8 +36,8 @@ class ArticlePresenterTest {
     @Test
     fun `When scraping article updates it with text`() {
         val url = "https://stanete.com/system-design-101"
-        val text = "System Design 101 [...] on GitHub © 2021 David Stanete"
-        every { scrapeArticle(url) } returns text
-        every { updateArticle(Article(url, text)) }
+        val content = "System Design 101 [...] on GitHub © 2021 David Stanete"
+        every { scrapeArticle(url) } returns content
+        every { updateArticle(Article(url, content)) }
     }
 }

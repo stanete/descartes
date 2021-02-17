@@ -1,14 +1,17 @@
 package com.descartes.actions
 
 import com.descartes.articles.Article
+import com.descartes.articles.ArticleRepository
+import com.descartes.extensions.withoutUrlParameters
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
 
 @Service
-class CreateArticle {
+class CreateArticle(private val repository: ArticleRepository) {
 
     operator fun invoke(url: String): Article {
-        Logger.getGlobal().info("Creating article with url $url.")
-        return Article(url)
+        val urlWithoutParameters = url.withoutUrlParameters()
+        Logger.getGlobal().info("Creating article with url $urlWithoutParameters.")
+        return repository.save(Article(urlWithoutParameters))
     }
 }

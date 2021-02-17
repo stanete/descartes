@@ -4,11 +4,11 @@ spring:
   main:
     banner-mode: "off"
   datasource:
-    url: "jdbc:postgresql://localhost:5432/database?user=admin"
+    url: "jdbc:postgresql://localhost:5432/database?user=admin?password=admin"
     driver-class-name: org.postgresql.Driver
   flyway:
     locations: filesystem:./db/migrations
-    enabled: false
+    enabled: true
   jpa:
     properties:
       hibernate:

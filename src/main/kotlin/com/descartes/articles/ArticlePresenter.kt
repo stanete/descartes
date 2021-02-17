@@ -24,8 +24,8 @@ class ArticlePresenter(
     }
 
     fun scrape(url: String) {
-        val text = scrapeArticle(url)
-        val article = Article(url, text)
+        val content = scrapeArticle(url)
+        val article = Article(url, content)
         updateArticle(article)
     }
 }
