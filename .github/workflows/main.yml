@@ -13,6 +13,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
           POSTGRES_DB: database
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
@@ -25,7 +26,7 @@ jobs:
         env:
           # Use postgres for the host here because we have specified a container for the job.
           # If we were running the job on the VM this would be localhost.
-          DATBASE_URL: jdbc:postgresql://db:5432/database?user=admin
+          DATBASE_URL: jdbc:postgresql://db:5432/database?user=admin&password=admin
         with:
           args: detekt test
   deploy:
