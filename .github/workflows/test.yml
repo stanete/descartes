@@ -5,18 +5,9 @@ on:
     branches: [ main ]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    name: "Lint"
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: OrangeLabs-moe/gradle-actions@v5.0-openjdk-13
-        with:
-          args: detekt
   test:
     runs-on: ubuntu-latest
     name: "Test"
-    needs: [ "lint" ]
     services:
       db:
         image: postgres
@@ -26,14 +17,14 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
-          # Set health checks to wait until postgres has started.
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        # Needed because the postgres container does not provide a health check.
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v2.3.4
       - uses: OrangeLabs-moe/gradle-actions@v5.0-openjdk-13
+        env:
+          # Use postgres for the host here because we have specified a container for the job.
+          # If we were running the job on the VM this would be localhost.
+          DATBASE_URL: postgres jdbc:postgresql://db:5432/database?user=admin
         with:
           args: test
