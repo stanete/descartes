@@ -6,7 +6,7 @@ import com.descartes.actions.ScrapeArticle
 import com.descartes.actions.UpdateArticle
 import com.descartes.actions.RetrieveArticle
 import com.descartes.actions.AnalyseArticle
-import com.descartes.actions.ArticleNotFound
+import com.descartes.concepts.Concept
 import com.descartes.mqtp.Message
 import com.descartes.mqtp.Rabbitmq
 import com.descartes.topics.Topic
@@ -68,14 +68,18 @@ class ArticlePresenterTest {
     }
 
     @Test
-    fun `When analysing article updates it with topics`() {
+    fun `When analysing article updates it with topics and concepts`() {
         val url = "https://stanete.com/system-design-101"
         val content = "System Design 101 [...] on GitHub © 2021 David Stanete"
         val article = Article(url, content)
         every { getArticle(url) } returns Ok(article)
-        val topics = mutableListOf(Topic(label = "System Design"), Topic(label = "Engineering"))
-        val analysedArticle = Article(article.url, article.content).apply { topics.forEach { addTopic(it) } }
-        every { analyseArticle(article) } returns analysedArticle
+        val topics = mutableSetOf(Topic(label = "System Design"), Topic(label = "Engineering"))
+        val concepts = mutableSetOf(Concept(label = "CDN"), Concept(label = "Load Balancer"))
+        val analysedArticle = Article(article.url, article.content).apply {
+            topics.forEach { addTopic(it) }
+            concepts.forEach { addConcept(it) }
+        }
+        every { analyseArticle(article) } returns Ok(analysedArticle)
         every { updateArticle(analysedArticle) } returns analysedArticle
 
         presenter.analyse(url)
@@ -85,6 +89,23 @@ class ArticlePresenterTest {
             analyseArticle(article)
             updateArticle(analysedArticle)
         }
+    }
+
+    @Test
+    fun `When could not analyse article returns Err wrapping throwable`() {
+        val url = "https://stanete.com/system-design-101"
+        val content = "System Design 101 [...] on GitHub © 2021 David Stanete"
+        val article = Article(url, content)
+        every { getArticle(url) } returns Ok(article)
+        every { analyseArticle(article) } returns Err(ArticleNotAnalysed(url))
+
+        presenter.analyse(url)
+
+        verifyOrder {
+            getArticle(url)
+            analyseArticle(article)
+        }
+        verify(exactly = 0) { updateArticle(any()) }
     }
 
     @Test
