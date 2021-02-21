@@ -4,16 +4,23 @@ import com.descartes.actions.CreateArticle
 import com.descartes.actions.PublishMessage
 import com.descartes.actions.ScrapeArticle
 import com.descartes.actions.UpdateArticle
+import com.descartes.actions.RetrieveArticle
+import com.descartes.actions.AnalyseArticle
 import com.descartes.mqtp.Message
 import com.descartes.mqtp.Rabbitmq
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 import org.springframework.stereotype.Service
+import java.util.logging.Logger
 
 @Service
 class ArticlePresenter(
-    private val publishMessage: PublishMessage,
     private val createArticle: CreateArticle,
+    private val publishMessage: PublishMessage,
     private val scrapeArticle: ScrapeArticle,
     private val updateArticle: UpdateArticle,
+    private val retrieveArticle: RetrieveArticle,
+    private val analyseArticle: AnalyseArticle
 ) {
 
     suspend fun create(url: String): Article {
@@ -27,5 +34,17 @@ class ArticlePresenter(
         val content = scrapeArticle(url)
         val article = Article(url, content)
         updateArticle(article)
+        val message = Message(mapOf("url" to article.url))
+        publishMessage(queueName = Rabbitmq.ANALYSE_ARTICLE, message)
+    }
+
+    fun analyse(url: String) {
+        when (val result = retrieveArticle(url)) {
+            is Ok -> {
+                val article = analyseArticle(result.value)
+                updateArticle(article)
+            }
+            is Err -> Logger.getGlobal().warning(result.error.message)
+        }
     }
 }
