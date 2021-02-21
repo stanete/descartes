@@ -1,5 +1,6 @@
 package com.descartes.articles
 
+import com.descartes.concepts.Concept
 import com.descartes.topics.Topic
 import org.amshove.kluent.shouldContain
 import org.junit.jupiter.api.Test
@@ -17,5 +18,15 @@ class ArticleTest {
 
         article.topics shouldContain topic
         topic.articles shouldContain article
+    }
+
+    @Test
+    fun `When adding concept ads itself to concept's articles`() {
+        val concept = Concept(label = "CDN")
+
+        article.addConcept(concept)
+
+        article.concepts shouldContain concept
+        concept.articles shouldContain article
     }
 }
