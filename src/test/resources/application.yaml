@@ -13,6 +13,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        enable_lazy_load_no_trans: true
         jdbc:
           lob:
             non_contextual_creation: true
@@ -34,3 +35,6 @@ management:
 
 cloudamqp:
   url: "amqp://guest:guest@localhost:5672"
+
+analyser:
+  apiKey: "test-api-key"
