@@ -4,7 +4,7 @@ spring:
   main:
     banner-mode: "off"
   datasource:
-    url: "jdbc:postgresql://localhost:5432/database?user=admin?password=admin"
+    url: "jdbc:postgresql://localhost:5432/database?user=admin&password=admin"
     driver-class-name: org.postgresql.Driver
   flyway:
     locations: filesystem:./db/migrations
@@ -13,6 +13,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        enable_lazy_load_no_trans: true
         jdbc:
           lob:
             non_contextual_creation: true
@@ -34,3 +35,6 @@ management:
 
 cloudamqp:
   url: "amqp://guest:guest@localhost:5672"
+
+analyser:
+  apiKey: "text-razor-fake-api-key"

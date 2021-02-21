@@ -28,4 +28,23 @@ class ArticleMessagesReceiverTest {
 
         verify(exactly = 0) { presenter.scrape(any()) }
     }
+
+    @Test
+    fun `When receiving message with url calls the presenter to analyse an article`() {
+        val message = "{\"data\":{\"url\":\"https://stanete.com/system-design-101\"}}"
+        justRun { presenter.analyse("https://stanete.com/system-design-101") }
+
+        receiver.analyse(message)
+
+        verify { presenter.analyse("https://stanete.com/system-design-101") }
+    }
+
+    @Test
+    fun `When receiving message without url does not call the presenter to analyse an article`() {
+        val message = "{\"data\":{}}"
+
+        receiver.analyse(message)
+
+        verify(exactly = 0) { presenter.analyse(any()) }
+    }
 }
