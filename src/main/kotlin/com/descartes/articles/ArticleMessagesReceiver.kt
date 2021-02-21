@@ -15,4 +15,11 @@ class ArticleMessagesReceiver(val presenter: ArticlePresenter) {
         val data = jacksonObjectMapper().readValue(message, Message::class.java).data
         data["url"]?.let { presenter.scrape(it) }
     }
+
+    @RabbitListener(queues = [Rabbitmq.ANALYSE_ARTICLE])
+    fun analyse(message: String) {
+        println("Message read from ${Rabbitmq.ANALYSE_ARTICLE}: $message.")
+        val data = jacksonObjectMapper().readValue(message, Message::class.java).data
+        data["url"]?.let { presenter.analyse(it) }
+    }
 }
