@@ -37,4 +37,4 @@ cloudamqp:
   url: "amqp://guest:guest@localhost:5672"
 
 analyser:
-  apiKey: "82804b8d7208f3b9e15c41b6a04692c76f9a412818d6f771f85f5adb"
+  apiKey: "text-razor-fake-api-key"
