@@ -4,6 +4,7 @@ import com.descartes.ApiContractAssertion.Companion.assertResponse
 import com.descartes.ArticleHttpStub
 import com.descartes.getStubContent
 import com.descartes.stub
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,6 +23,20 @@ class ArticleControllerTest {
 
     @Autowired
     private lateinit var webTestClient: WebTestClient
+
+    @Autowired
+    private lateinit var articleRepository: ArticleRepository
+
+    @AfterEach
+    fun setUp() {
+        /**
+         * Automatic rollback with @Transaction annotation is not supported when applied directly from
+         * the "web layer". Using either RANDOM_PORT or DEFINED_PORT implicitly provides a real servlet environment.
+         * HTTP client and server will run in separate threads, thus separate transactions. Any transaction initiated
+         * on the server won’t rollback in this case. So the database needs to be cleaned manually.
+         */
+        articleRepository.deleteAll()
+    }
 
     @Test
     fun `When creating a new article with a url return a response with the created article`() {
