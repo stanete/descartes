@@ -13,4 +13,9 @@ class Rabbitmq(@Value("\${cloudamqp.url}") val uri: String) {
 
     @Bean
     fun publisher(rabbitTemplate: RabbitTemplate) = mockk<Publisher>(relaxed = true)
+
+    companion object {
+        const val SCRAPE_ARTICLE = "scrapeArticle"
+        const val ANALYSE_ARTICLE = "analyseArticle"
+    }
 }
