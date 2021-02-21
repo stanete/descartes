@@ -1,7 +1,6 @@
 package com.descartes.articles
 
 import com.descartes.topics.Topic
-import java.util.logging.Logger
 import javax.persistence.Entity
 import javax.persistence.Table
 import javax.persistence.Id
@@ -26,7 +25,6 @@ data class Article(
     val topics: MutableSet<Topic> = HashSet()
 
     fun addTopic(topic: Topic) {
-        Logger.getGlobal().info("Adding topic $topic.")
         topics.add(topic)
         topic.articles.add(this)
     }
