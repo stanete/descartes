@@ -6,6 +6,8 @@ import com.descartes.actions.ScrapeArticle
 import com.descartes.actions.UpdateArticle
 import com.descartes.actions.RetrieveArticle
 import com.descartes.actions.AnalyseArticle
+import com.descartes.actions.ArticleNotAnalysed
+import com.descartes.actions.ArticleNotFound
 import com.descartes.concepts.Concept
 import com.descartes.mqtp.Message
 import com.descartes.mqtp.Rabbitmq
