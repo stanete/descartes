@@ -8,8 +8,8 @@ import com.descartes.actions.RetrieveArticle
 import com.descartes.actions.AnalyseArticle
 import com.descartes.mqtp.Message
 import com.descartes.mqtp.Rabbitmq
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.onSuccess
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
 
@@ -20,7 +20,7 @@ class ArticlePresenter(
     private val scrapeArticle: ScrapeArticle,
     private val updateArticle: UpdateArticle,
     private val retrieveArticle: RetrieveArticle,
-    private val analyseArticle: AnalyseArticle
+    private val analyseArticle: AnalyseArticle,
 ) {
 
     suspend fun create(url: String): Article {
@@ -39,12 +39,12 @@ class ArticlePresenter(
     }
 
     fun analyse(url: String) {
-        when (val result = retrieveArticle(url)) {
-            is Ok -> {
-                val article = analyseArticle(result.value)
-                updateArticle(article)
+        retrieveArticle(url)
+            .onSuccess {
+                analyseArticle(it)
+                    .onSuccess { updateArticle(it) }
+                    .onFailure { Logger.getGlobal().warning(it.message) }
             }
-            is Err -> Logger.getGlobal().warning(result.error.message)
-        }
+            .onFailure { Logger.getGlobal().warning(it.message) }
     }
 }
