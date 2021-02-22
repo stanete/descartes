@@ -24,7 +24,7 @@ class AnalyseArticle(val analyser: TextRazor) {
         val language = analyzedContent.response.language
         val topics = analyzedContent.response.topics.filter { it.score > MINIMUM_TOPIC_SCORE }
         val entities = analyzedContent.response.entities
-            .filter { it.isRelevant() && it.isTrusted() }
+            .filter { it.hasEnoughData() && (it.isRelevant() || it.isTrusted()) }
             .distinctBy { it.wikiLink }
 
         Ok(
@@ -49,6 +49,8 @@ class AnalyseArticle(val analyser: TextRazor) {
 fun Entity.isRelevant(): Boolean = relevanceScore > MINIMUM_ENTITY_RELEVANCE_SCORE
 
 fun Entity.isTrusted(): Boolean = confidenceScore > MINIMUM_ENTITY_CONFIDENCE_SCORE
+
+fun Entity.hasEnoughData(): Boolean = entityEnglishId.isNotBlank() && wikiLink.isNotBlank()
 
 class ArticleNotAnalysed(url: String) : Throwable(
     "Unable to analyse Article with url: $url."
