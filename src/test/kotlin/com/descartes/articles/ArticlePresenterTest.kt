@@ -1,13 +1,14 @@
 package com.descartes.articles
 
-import com.descartes.actions.PublishMessage
-import com.descartes.actions.CreateArticle
-import com.descartes.actions.ScrapeArticle
-import com.descartes.actions.UpdateArticle
-import com.descartes.actions.RetrieveArticle
 import com.descartes.actions.AnalyseArticle
 import com.descartes.actions.ArticleNotAnalysed
 import com.descartes.actions.ArticleNotFound
+import com.descartes.actions.CreateArticle
+import com.descartes.actions.CreateRecommendations
+import com.descartes.actions.PublishMessage
+import com.descartes.actions.RetrieveArticle
+import com.descartes.actions.ScrapeArticle
+import com.descartes.actions.UpdateArticle
 import com.descartes.concepts.Concept
 import com.descartes.mqtp.Message
 import com.descartes.mqtp.Rabbitmq
@@ -31,9 +32,10 @@ class ArticlePresenterTest {
     private val updateArticle = mockk<UpdateArticle>()
     private val getArticle = mockk<RetrieveArticle>()
     private val analyseArticle = mockk<AnalyseArticle>()
+    private val createRecommendations = mockk<CreateRecommendations>()
 
     private val presenter = ArticlePresenter(
-        createArticle, publishMessage, scrapeArticle, updateArticle, getArticle, analyseArticle
+        createArticle, publishMessage, scrapeArticle, updateArticle, getArticle, analyseArticle, createRecommendations
     )
 
     @Test
@@ -83,6 +85,8 @@ class ArticlePresenterTest {
         }
         every { analyseArticle(article) } returns Ok(analysedArticle)
         every { updateArticle(analysedArticle) } returns analysedArticle
+        val message = Message(mapOf("url" to url))
+        justRun { publishMessage(Rabbitmq.CREATE_RECOMMENDATIONS, message) }
 
         presenter.analyse(url)
 
@@ -90,6 +94,7 @@ class ArticlePresenterTest {
             getArticle(url)
             analyseArticle(article)
             updateArticle(analysedArticle)
+            publishMessage(Rabbitmq.CREATE_RECOMMENDATIONS, message)
         }
     }
 
@@ -121,5 +126,23 @@ class ArticlePresenterTest {
         verify(exactly = 0) { analyseArticle(any()) }
         verify(exactly = 0) { updateArticle(any()) }
         verify(exactly = 0) { publishMessage(any(), any()) }
+    }
+
+    @Test
+    fun `When creating recommendations for article updates it with recommended articles`() {
+        val url = "https://stanete.com/system-design-101"
+        val article = Article(url, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
+        val articleWithRecommendations = article.copy().apply {
+            addRecommendation(Article(url = "https://stanete.com/system-design-102"))
+        }
+        every { getArticle(url) } returns Ok(article)
+        every { createRecommendations(article) } returns Ok(articleWithRecommendations)
+
+        presenter.createRecommendations(url)
+
+        verifyOrder {
+            getArticle(url)
+            createRecommendations(article)
+        }
     }
 }
