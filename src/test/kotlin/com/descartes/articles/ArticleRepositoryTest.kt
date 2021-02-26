@@ -4,7 +4,6 @@ import com.descartes.concepts.Concept
 import com.descartes.concepts.ConceptRepository
 import com.descartes.topics.Topic
 import com.descartes.topics.TopicRepository
-import io.mockk.InternalPlatformDsl.toArray
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.logging.Logger
 import javax.transaction.Transactional
 
 @Transactional
@@ -60,6 +58,23 @@ class ArticleRepositoryTest {
         articles[1].url shouldBeEqualTo "https://stanete.com/system-design-103"
         articles[2].url shouldBeEqualTo "https://stanete.com/system-design-104"
         articles[3].url shouldBeEqualTo "https://stanete.com/system-design-102"
+    }
+
+    @Test
+    fun `When finding articles returns all its recommendations`() {
+        val savedArticle = repository.save(
+            Article(url = "https://stanete.com/system-design-101").apply {
+                addTopic(Topic(label = "System Design"))
+                addTopic(Topic(label = "Networking"))
+                addTopic(Topic(label = "Programming"))
+                addTopic(Topic(label = "Computer Science"))
+            }
+        )
+        setUpRecommendationsForArticle(savedArticle)
+
+        val article = repository.findById(savedArticle.url).get()
+
+        article.recommendations.size shouldBeEqualTo 3
     }
 
     private fun setUpArticlesWithTopics(): List<Article> = repository.saveAll(listOf(
@@ -117,4 +132,32 @@ class ArticleRepositoryTest {
             addConcept(Concept(label = "World Wide Web"))
         }
     ))
+
+    private fun setUpRecommendationsForArticle(article: Article): List<Article> {
+        val articles = repository.saveAll(listOf(
+            Article(url = "https://stanete.com/system-design-102").apply {
+                // Article with a lot of topics that other articles don't have.
+                addTopic(Topic(label = "Programming"))
+                addTopic(Topic(label = "Engineering"))
+                addTopic(Topic(label = "Architecture"))
+                addTopic(Topic(label = "Computer Systems"))
+                addTopic(Topic(label = "Software"))
+            },
+            Article(url = "https://stanete.com/system-design-103").apply {
+                addTopic(Topic(label = "System Design"))
+                addTopic(Topic(label = "Networking"))
+                addTopic(Topic(label = "Engineering"))
+                addTopic(Topic(label = "Computer Science"))
+            },
+            Article(url = "https://stanete.com/system-design-104").apply {
+                addTopic(Topic(label = "System Design"))
+                addTopic(Topic(label = "Networking"))
+                addTopic(Topic(label = "Engineering"))
+            }
+        ))
+
+        articles.forEach { article.addRecommendation(it) }
+
+        return repository.saveAll(articles)
+    }
 }
