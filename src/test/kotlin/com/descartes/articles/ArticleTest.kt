@@ -29,4 +29,14 @@ class ArticleTest {
         article.concepts shouldContain concept
         concept.articles shouldContain article
     }
+
+    @Test
+    fun `When adding recommendation ads itself to recommendation's articles`() {
+        val recommendedArticle = Article(url = "https://stanete.com/system-design-102")
+
+        article.addRecommendation(recommendedArticle)
+
+        article.recommendations shouldContain recommendedArticle
+        recommendedArticle.recommendations shouldContain article
+    }
 }

@@ -1,11 +1,12 @@
 package com.descartes.articles
 
+import com.descartes.actions.AnalyseArticle
 import com.descartes.actions.CreateArticle
+import com.descartes.actions.CreateRecommendations
 import com.descartes.actions.PublishMessage
+import com.descartes.actions.RetrieveArticle
 import com.descartes.actions.ScrapeArticle
 import com.descartes.actions.UpdateArticle
-import com.descartes.actions.RetrieveArticle
-import com.descartes.actions.AnalyseArticle
 import com.descartes.mqtp.Message
 import com.descartes.mqtp.Rabbitmq
 import com.github.michaelbull.result.onFailure
@@ -21,6 +22,7 @@ class ArticlePresenter(
     private val updateArticle: UpdateArticle,
     private val retrieveArticle: RetrieveArticle,
     private val analyseArticle: AnalyseArticle,
+    private val createRecommendations: CreateRecommendations,
 ) {
 
     suspend fun create(url: String): Article {
@@ -42,7 +44,20 @@ class ArticlePresenter(
         retrieveArticle(url)
             .onSuccess {
                 analyseArticle(it)
-                    .onSuccess { updateArticle(it) }
+                    .onSuccess {
+                        updateArticle(it)
+                        val message = Message(mapOf("url" to it.url))
+                        publishMessage(queueName = Rabbitmq.CREATE_RECOMMENDATIONS, message)
+                    }
+                    .onFailure { Logger.getGlobal().warning(it.message) }
+            }
+            .onFailure { Logger.getGlobal().warning(it.message) }
+    }
+
+    fun createRecommendations(url: String) {
+        retrieveArticle(url)
+            .onSuccess {
+                createRecommendations(it)
                     .onFailure { Logger.getGlobal().warning(it.message) }
             }
             .onFailure { Logger.getGlobal().warning(it.message) }

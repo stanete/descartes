@@ -2,13 +2,14 @@ package com.descartes.articles
 
 import com.descartes.concepts.Concept
 import com.descartes.topics.Topic
-import javax.persistence.Entity
-import javax.persistence.Table
-import javax.persistence.Id
-import javax.persistence.ManyToMany
 import javax.persistence.CascadeType
-import javax.persistence.JoinTable
+import javax.persistence.Entity
+import javax.persistence.Id
 import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "articles")
@@ -32,6 +33,18 @@ data class Article(
         inverseJoinColumns = [JoinColumn(name = "concept_id")],
     )
     val concepts: MutableSet<Concept> = HashSet()
+
+    @OneToMany
+    @JoinTable(name = "recommendations",
+        joinColumns = [JoinColumn(name = "article_id")],
+        inverseJoinColumns = [JoinColumn(name = "recommended_article_id")]
+    )
+    val recommendations: MutableSet<Article> = HashSet()
+
+    fun addRecommendation(article: Article) {
+        recommendations.add(article)
+        article.recommendations.add(this)
+    }
 
     fun addTopic(topic: Topic) {
         topics.add(topic)

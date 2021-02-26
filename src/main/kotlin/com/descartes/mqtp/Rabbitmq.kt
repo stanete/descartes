@@ -19,6 +19,9 @@ class Rabbitmq(@Value("\${cloudamqp.url}") val uri: String) {
     fun analyseQueue(): Queue = Queue(ANALYSE_ARTICLE, false)
 
     @Bean
+    fun relateQueue(): Queue = Queue(CREATE_RECOMMENDATIONS, false)
+
+    @Bean
     fun connectionFactory() = CachingConnectionFactory().apply {
         setUri(uri)
     }
@@ -29,5 +32,6 @@ class Rabbitmq(@Value("\${cloudamqp.url}") val uri: String) {
     companion object {
         const val SCRAPE_ARTICLE = "scrapeArticle"
         const val ANALYSE_ARTICLE = "analyseArticle"
+        const val CREATE_RECOMMENDATIONS = "createRecommendations"
     }
 }

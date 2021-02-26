@@ -16,11 +16,9 @@ interface ArticleRepository : JpaRepository<Article, String> {
         @Param("topics") topics: Set<Topic>,
     ): List<Article>
 
-
     @Query("SELECT DISTINCT(a), COUNT(c) FROM Article a INNER JOIN a.concepts c " +
         "WHERE c IN :concepts GROUP BY a.url ORDER BY COUNT(c) DESC")
     fun findAllByConcepts(
         @Param("concepts") topics: Set<Concept>,
     ): List<Article>
 }
-
