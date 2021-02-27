@@ -1,10 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.adarshr.gradle.testlogger.theme.ThemeType
+
 
 plugins {
     id("org.springframework.boot") version "2.4.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.gitlab.arturbosch.detekt") version "1.15.0"
     id("org.flywaydb.flyway") version "6.0.7"
+    id("com.adarshr.test-logger") version "2.1.1"
     kotlin("jvm") version "1.4.30"
     kotlin("plugin.spring") version "1.4.30"
     kotlin("plugin.jpa") version "1.4.21"
@@ -88,6 +91,11 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-tasks.withType<Test> {
+
+tasks.test {
     useJUnitPlatform()
+
+    testlogger {
+        theme = ThemeType.STANDARD
+    }
 }
