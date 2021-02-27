@@ -1,8 +1,7 @@
----
-description: Collaborative content discoverability network for independent writers.
----
+# descartes 🕵️‍♂️
 
-# descartes
+Collaborative content discoverability network for independent writers.
+
 
 ![](.gitbook/assets/descartes-header.jpeg)
 
@@ -24,7 +23,7 @@ This application follows an architecture similar to [Model View Presenter](https
 
 A few things to note about it:
 
-* The _Controller_,  _Message Receiver_ _Gateway_ and _Repository_ are the outer world. Everything in between is what happens inside the application's domain.
+* The _Controller_,  _Message Receiver_, _Gateway_ and _Repository_ are the outer world. Everything in between is what happens inside the application's domain.
 * Decouple business logic from the _Controller_ and _Message Receiver_ and from any framework related dependency by delegating to a _Presenters_ as fast as possible.
 * _Actions_ are composable small pieces of business logic. A _Presenter_ will combine them to achieve more complex business cases.
 * An _Action_ is a verb. It is a class, and not a function, only because Dependency Injection is easier that way. Actually we advise you to use the `invoke operator`.
