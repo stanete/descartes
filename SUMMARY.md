@@ -1,6 +1,4 @@
 # Table of contents
 
-* [descartes](README.md)
-
-## docs
+* [Initial page](README.md)
 
