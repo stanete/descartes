@@ -6,7 +6,7 @@ plugins {
     id("org.springframework.boot") version "2.4.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.gitlab.arturbosch.detekt") version "1.15.0"
-    id("org.flywaydb.flyway") version "6.0.7"
+    id("org.flywaydb.flyway") version "7.5.4"
     id("com.adarshr.test-logger") version "2.1.1"
     kotlin("jvm") version "1.4.30"
     kotlin("plugin.spring") version "1.4.30"
