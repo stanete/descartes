@@ -27,7 +27,6 @@ repositories {
             // detekt needs 'kotlinx-html' for the html report
             includeGroup("org.jetbrains.kotlinx")
             includeGroup("org.amshove.kluent")
-            // includeGroup("commons-validator")
         }
     }
 }
