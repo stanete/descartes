@@ -27,6 +27,7 @@ repositories {
             // detekt needs 'kotlinx-html' for the html report
             includeGroup("org.jetbrains.kotlinx")
             includeGroup("org.amshove.kluent")
+            // includeGroup("commons-validator")
         }
     }
 }
@@ -54,6 +55,7 @@ dependencies {
     implementation("it.skrape:skrapeit-core:$skrapeItVersion")
     implementation("com.michael-bull.kotlin-result:kotlin-result:$kotlinResultVersion")
     implementation("com.textrazor:textrazor:$textRazorVersion")
+    implementation("commons-validator:commons-validator:1.7")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("io.mockk:mockk:$mockkVersion")
