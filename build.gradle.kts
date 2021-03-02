@@ -3,7 +3,7 @@ import com.adarshr.gradle.testlogger.theme.ThemeType
 
 
 plugins {
-    id("org.springframework.boot") version "2.4.2"
+    id("org.springframework.boot") version "2.4.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.gitlab.arturbosch.detekt") version "1.15.0"
     id("org.flywaydb.flyway") version "6.0.7"
