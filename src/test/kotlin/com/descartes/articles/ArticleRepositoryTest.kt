@@ -1,5 +1,7 @@
 package com.descartes.articles
 
+import com.descartes.blogs.Blog
+import com.descartes.blogs.BlogRepository
 import com.descartes.concepts.Concept
 import com.descartes.concepts.ConceptRepository
 import com.descartes.topics.Topic
@@ -21,6 +23,9 @@ class ArticleRepositoryTest {
 
     @Autowired
     lateinit var repository: ArticleRepository
+
+    @Autowired
+    lateinit var blogRepository: BlogRepository
 
     @Autowired
     lateinit var topicRepository: TopicRepository
@@ -62,8 +67,9 @@ class ArticleRepositoryTest {
 
     @Test
     fun `When finding articles returns all its recommendations`() {
+        val blog = blogRepository.save(Blog(url = "https/stanete.com/"))
         val savedArticle = repository.save(
-            Article(url = "https://stanete.com/system-design-101").apply {
+            Article(url = "https://stanete.com/system-design-101", blog = blog).apply {
                 addTopic(Topic(label = "System Design"))
                 addTopic(Topic(label = "Networking"))
                 addTopic(Topic(label = "Programming"))
@@ -77,65 +83,16 @@ class ArticleRepositoryTest {
         article.recommendations.size shouldBeEqualTo 3
     }
 
-    private fun setUpArticlesWithTopics(): List<Article> = repository.saveAll(listOf(
-        Article(url = "https://stanete.com/system-design-101").apply {
-            addTopic(Topic(label = "System Design"))
-            addTopic(Topic(label = "Networking"))
-            addTopic(Topic(label = "Programming"))
-            addTopic(Topic(label = "Computer Science"))
-        },
-        Article(url = "https://stanete.com/system-design-102").apply {
-            // Article with a lot of topics that other articles don't have.
-            addTopic(Topic(label = "Programming"))
-            addTopic(Topic(label = "Engineering"))
-            addTopic(Topic(label = "Architecture"))
-            addTopic(Topic(label = "Computer Systems"))
-            addTopic(Topic(label = "Software"))
-        },
-        Article(url = "https://stanete.com/system-design-103").apply {
-            addTopic(Topic(label = "System Design"))
-            addTopic(Topic(label = "Networking"))
-            addTopic(Topic(label = "Engineering"))
-            addTopic(Topic(label = "Computer Science"))
-        },
-        Article(url = "https://stanete.com/system-design-104").apply {
-            addTopic(Topic(label = "System Design"))
-            addTopic(Topic(label = "Networking"))
-            addTopic(Topic(label = "Engineering"))
-        }
-    ))
-
-    private fun setUpArticlesWithConcepts(): List<Article> = repository.saveAll(listOf(
-        Article(url = "https://stanete.com/system-design-101").apply {
-            addConcept(Concept(label = "CDN"))
-            addConcept(Concept(label = "Amazon Web Services"))
-            addConcept(Concept(label = "PostgreSQL"))
-            addConcept(Concept(label = "Docker"))
-        },
-        Article(url = "https://stanete.com/system-design-102").apply {
-            // Article with a lot of concepts that other articles don't have.
-            addConcept(Concept(label = "PostgreSQL"))
-            addConcept(Concept(label = "World Wide Web"))
-            addConcept(Concept(label = "Netlify"))
-            addConcept(Concept(label = "DevOps"))
-            addConcept(Concept(label = "IP address"))
-        },
-        Article(url = "https://stanete.com/system-design-103").apply {
-            addConcept(Concept(label = "CDN"))
-            addConcept(Concept(label = "Amazon Web Services"))
-            addConcept(Concept(label = "World Wide Web"))
-            addConcept(Concept(label = "Docker"))
-        },
-        Article(url = "https://stanete.com/system-design-104").apply {
-            addConcept(Concept(label = "CDN"))
-            addConcept(Concept(label = "Amazon Web Services"))
-            addConcept(Concept(label = "World Wide Web"))
-        }
-    ))
-
-    private fun setUpRecommendationsForArticle(article: Article): List<Article> {
-        val articles = repository.saveAll(listOf(
-            Article(url = "https://stanete.com/system-design-102").apply {
+    private fun setUpArticlesWithTopics(): List<Article> {
+        val blog = blogRepository.save(Blog(url = "https/stanete.com/"))
+        return repository.saveAll(listOf(
+            Article(url = "https://stanete.com/system-design-101", blog = blog).apply {
+                addTopic(Topic(label = "System Design"))
+                addTopic(Topic(label = "Networking"))
+                addTopic(Topic(label = "Programming"))
+                addTopic(Topic(label = "Computer Science"))
+            },
+            Article(url = "https://stanete.com/system-design-102", blog = blog).apply {
                 // Article with a lot of topics that other articles don't have.
                 addTopic(Topic(label = "Programming"))
                 addTopic(Topic(label = "Engineering"))
@@ -143,13 +100,69 @@ class ArticleRepositoryTest {
                 addTopic(Topic(label = "Computer Systems"))
                 addTopic(Topic(label = "Software"))
             },
-            Article(url = "https://stanete.com/system-design-103").apply {
+            Article(url = "https://stanete.com/system-design-103", blog = blog).apply {
                 addTopic(Topic(label = "System Design"))
                 addTopic(Topic(label = "Networking"))
                 addTopic(Topic(label = "Engineering"))
                 addTopic(Topic(label = "Computer Science"))
             },
-            Article(url = "https://stanete.com/system-design-104").apply {
+            Article(url = "https://stanete.com/system-design-104", blog = blog).apply {
+                addTopic(Topic(label = "System Design"))
+                addTopic(Topic(label = "Networking"))
+                addTopic(Topic(label = "Engineering"))
+            }
+        ))
+    }
+
+    private fun setUpArticlesWithConcepts(): List<Article> {
+        val blog = blogRepository.save(Blog(url = "https/stanete.com/"))
+        return repository.saveAll(listOf(
+            Article(url = "https://stanete.com/system-design-101", blog).apply {
+                addConcept(Concept(label = "CDN"))
+                addConcept(Concept(label = "Amazon Web Services"))
+                addConcept(Concept(label = "PostgreSQL"))
+                addConcept(Concept(label = "Docker"))
+            },
+            Article(url = "https://stanete.com/system-design-102", blog).apply {
+                // Article with a lot of concepts that other articles don't have.
+                addConcept(Concept(label = "PostgreSQL"))
+                addConcept(Concept(label = "World Wide Web"))
+                addConcept(Concept(label = "Netlify"))
+                addConcept(Concept(label = "DevOps"))
+                addConcept(Concept(label = "IP address"))
+            },
+            Article(url = "https://stanete.com/system-design-103", blog).apply {
+                addConcept(Concept(label = "CDN"))
+                addConcept(Concept(label = "Amazon Web Services"))
+                addConcept(Concept(label = "World Wide Web"))
+                addConcept(Concept(label = "Docker"))
+            },
+            Article(url = "https://stanete.com/system-design-104", blog).apply {
+                addConcept(Concept(label = "CDN"))
+                addConcept(Concept(label = "Amazon Web Services"))
+                addConcept(Concept(label = "World Wide Web"))
+            }
+        ))
+    }
+
+    private fun setUpRecommendationsForArticle(article: Article): List<Article> {
+        val blog = blogRepository.save(Blog(url = "https/stanete.com/"))
+        val articles = repository.saveAll(listOf(
+            Article(url = "https://stanete.com/system-design-102", blog = blog).apply {
+                // Article with a lot of topics that other articles don't have.
+                addTopic(Topic(label = "Programming"))
+                addTopic(Topic(label = "Engineering"))
+                addTopic(Topic(label = "Architecture"))
+                addTopic(Topic(label = "Computer Systems"))
+                addTopic(Topic(label = "Software"))
+            },
+            Article(url = "https://stanete.com/system-design-103", blog = blog).apply {
+                addTopic(Topic(label = "System Design"))
+                addTopic(Topic(label = "Networking"))
+                addTopic(Topic(label = "Engineering"))
+                addTopic(Topic(label = "Computer Science"))
+            },
+            Article(url = "https://stanete.com/system-design-104", blog = blog).apply {
                 addTopic(Topic(label = "System Design"))
                 addTopic(Topic(label = "Networking"))
                 addTopic(Topic(label = "Engineering"))

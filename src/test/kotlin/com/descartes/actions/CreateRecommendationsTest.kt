@@ -2,6 +2,7 @@ package com.descartes.actions
 
 import com.descartes.articles.Article
 import com.descartes.articles.ArticleRepository
+import com.descartes.blogs.Blog
 import com.descartes.concepts.Concept
 import com.descartes.topics.Topic
 import com.github.michaelbull.result.getError
@@ -47,7 +48,10 @@ class CreateRecommendationsTest {
         result.getError() shouldBeInstanceOf RecommendationsNotCreated::class
     }
 
-    private fun articleWithTopicsAndConcepts() = Article(url = "https://stanete.com/system-design-101").apply {
+    private fun articleWithTopicsAndConcepts() = Article(
+        url = "https://stanete.com/system-design-101",
+        blog = Blog(url = "https://stanete.com/")
+    ).apply {
         addTopic(Topic(label = "System Design"))
         addTopic(Topic(label = "Networking"))
         addTopic(Topic(label = "Programming"))
@@ -59,7 +63,10 @@ class CreateRecommendationsTest {
     }
 
     private fun articlesFoundByTopics(): List<Article> = listOf(
-        Article(url = "https://stanete.com/system-design-102").apply {
+        Article(
+            url = "https://stanete.com/system-design-102",
+            blog = Blog(url = "https://stanete.com/")
+        ).apply {
             // Article with a lot of topics that other articles don't have.
             addTopic(Topic(label = "Programming"))
             addTopic(Topic(label = "Engineering"))
@@ -67,13 +74,19 @@ class CreateRecommendationsTest {
             addTopic(Topic(label = "Computer Systems"))
             addTopic(Topic(label = "Software"))
         },
-        Article(url = "https://stanete.com/system-design-103").apply {
+        Article(
+            url = "https://stanete.com/system-design-103",
+            blog = Blog(url = "https://stanete.com/")
+        ).apply {
             addTopic(Topic(label = "System Design"))
             addTopic(Topic(label = "Networking"))
             addTopic(Topic(label = "Engineering"))
             addTopic(Topic(label = "Computer Science"))
         },
-        Article(url = "https://stanete.com/system-design-104").apply {
+        Article(
+            url = "https://stanete.com/system-design-104",
+            blog = Blog(url = "https://stanete.com/")
+        ).apply {
             addTopic(Topic(label = "System Design"))
             addTopic(Topic(label = "Networking"))
             addTopic(Topic(label = "Engineering"))
@@ -81,7 +94,10 @@ class CreateRecommendationsTest {
     )
 
     private fun articlesFoundByConcepts(): List<Article> = listOf(
-        Article(url = "https://stanete.com/system-design-102").apply {
+        Article(
+            url = "https://stanete.com/system-design-102",
+            blog = Blog(url = "https://stanete.com/")
+        ).apply {
             // Article with a lot of concepts that other articles don't have.
             addConcept(Concept(label = "PostgreSQL"))
             addConcept(Concept(label = "World Wide Web"))
@@ -89,13 +105,19 @@ class CreateRecommendationsTest {
             addConcept(Concept(label = "DevOps"))
             addConcept(Concept(label = "IP address"))
         },
-        Article(url = "https://stanete.com/system-design-103").apply {
+        Article(
+            url = "https://stanete.com/system-design-103",
+            blog = Blog(url = "https://stanete.com/")
+        ).apply {
             addConcept(Concept(label = "CDN"))
             addConcept(Concept(label = "Amazon Web Services"))
             addConcept(Concept(label = "World Wide Web"))
             addConcept(Concept(label = "Docker"))
         },
-        Article(url = "https://stanete.com/system-design-104").apply {
+        Article(
+            url = "https://stanete.com/system-design-104",
+            blog = Blog(url = "https://stanete.com/")
+        ).apply {
             addConcept(Concept(label = "CDN"))
             addConcept(Concept(label = "Amazon Web Services"))
             addConcept(Concept(label = "World Wide Web"))

@@ -1,5 +1,6 @@
 package com.descartes.articles
 
+import com.descartes.blogs.Blog
 import com.descartes.concepts.Concept
 import com.descartes.topics.Topic
 import javax.persistence.CascadeType
@@ -8,6 +9,7 @@ import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.JoinTable
 import javax.persistence.ManyToMany
+import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.Table
 
@@ -15,6 +17,9 @@ import javax.persistence.Table
 @Table(name = "articles")
 data class Article(
     @Id val url: String,
+    @ManyToOne
+    @JoinColumn(name = "blog_id")
+    val blog: Blog,
     val content: String? = null,
     val language: String? = null,
 ) {
@@ -35,7 +40,8 @@ data class Article(
     val concepts: MutableSet<Concept> = HashSet()
 
     @OneToMany
-    @JoinTable(name = "recommendations",
+    @JoinTable(
+        name = "recommendations",
         joinColumns = [JoinColumn(name = "article_id")],
         inverseJoinColumns = [JoinColumn(name = "recommended_article_id")]
     )
