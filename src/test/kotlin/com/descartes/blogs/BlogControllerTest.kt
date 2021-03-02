@@ -12,7 +12,6 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Mono
-import java.util.logging.Logger
 
 @SpringBootTest
 @AutoConfigureWebTestClient

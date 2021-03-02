@@ -2,7 +2,6 @@ package com.descartes.blogs
 
 import com.descartes.http.BadRequestResponseBody.Error
 import com.descartes.extensions.isValidUrl
-import com.descartes.http.BadRequestResponseBody
 import com.descartes.http.RequestBody
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok

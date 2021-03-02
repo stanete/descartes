@@ -5,8 +5,6 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.logging.Logger
-
 
 @Throws(URISyntaxException::class)
 fun String.withoutUrlParameters(): String {

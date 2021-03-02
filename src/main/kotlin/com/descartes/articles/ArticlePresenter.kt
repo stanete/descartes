@@ -10,9 +10,6 @@ import com.descartes.actions.ScrapeArticle
 import com.descartes.actions.UpdateArticle
 import com.descartes.mqtp.Message
 import com.descartes.mqtp.Rabbitmq
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
