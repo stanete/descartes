@@ -11,24 +11,20 @@ import com.github.michaelbull.result.Result
 data class CreateBlogRequestBody(
     val url: String,
 ) : RequestBody {
-    override fun validate(): Result<Unit, BadRequestResponseBody> = when {
+    override fun validate(): Result<Unit, List<Error>> = when {
         url.isEmpty() -> Err(
-            BadRequestResponseBody(
-                errors = listOf(
-                    Error(
-                        field = "url",
-                        message = "Url is empty."
-                    )
+            listOf(
+                Error(
+                    field = "url",
+                    message = "Url is empty."
                 )
             )
         )
-        url.isValidUrl() -> Err(
-            BadRequestResponseBody(
-                errors = listOf(
-                    Error(
-                        field = "url",
-                        message = "Url is not valid."
-                    )
+        url.isValidUrl().not() -> Err(
+            listOf(
+                Error(
+                    field = "url",
+                    message = "Url is not valid."
                 )
             )
         )
