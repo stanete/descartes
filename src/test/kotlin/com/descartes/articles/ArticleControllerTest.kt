@@ -2,9 +2,12 @@ package com.descartes.articles
 
 import com.descartes.ApiContractAssertion.Companion.assertResponse
 import com.descartes.ArticleHttpStub
+import com.descartes.blogs.Blog
+import com.descartes.blogs.BlogRepository
 import com.descartes.getStubContent
 import com.descartes.stub
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,7 +28,15 @@ class ArticleControllerTest {
     private lateinit var webTestClient: WebTestClient
 
     @Autowired
+    private lateinit var blogRepository: BlogRepository
+
+    @Autowired
     private lateinit var articleRepository: ArticleRepository
+
+    @BeforeEach
+    fun tearDown() {
+        blogRepository.save(Blog(url = "https://stanete.com/"))
+    }
 
     @AfterEach
     fun setUp() {
@@ -36,10 +47,12 @@ class ArticleControllerTest {
          * on the server won’t rollback in this case. So the database needs to be cleaned manually.
          */
         articleRepository.deleteAll()
+        blogRepository.deleteAll()
     }
 
     @Test
     fun `When creating a new article with a url return a response with the created article`() {
+        blogRepository.save(Blog(url = "https://stanete.com/"))
         val url = "https://stanete.com/system-design-101"
         stub(
             ArticleHttpStub(

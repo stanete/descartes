@@ -2,6 +2,8 @@ package com.descartes.actions
 
 import com.descartes.articles.Article
 import com.descartes.articles.ArticleRepository
+import com.descartes.blogs.Blog
+import com.descartes.blogs.BlogRepository
 import com.github.michaelbull.result.get
 import com.github.michaelbull.result.getError
 import org.amshove.kluent.shouldBeEqualTo
@@ -18,14 +20,18 @@ import javax.transaction.Transactional
 class RetrieveArticleTest {
 
     @Autowired
+    private lateinit var blogRepository: BlogRepository
+
+    @Autowired
     private lateinit var repository: ArticleRepository
     private val url = "https://stanete.com/system-design-101"
 
     @Test
     fun `When invoking returns Ok wrapping article by url`() {
+        val blog = blogRepository.save(Blog(url = "https://stanete.com/"))
         val retrieveArticle = RetrieveArticle(repository)
         val savedArticle = repository.save(
-            Article(url, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
+            Article(url, blog, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
         )
 
         val result = retrieveArticle(url)

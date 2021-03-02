@@ -1,5 +1,6 @@
 package com.descartes.articles
 
+import com.descartes.blogs.Blog
 import com.descartes.concepts.Concept
 import com.descartes.topics.Topic
 import org.amshove.kluent.shouldContain
@@ -8,7 +9,8 @@ import org.junit.jupiter.api.Test
 class ArticleTest {
 
     val url = "https://stanete.com/system-design-101"
-    private val article: Article = Article(url)
+    private val blog = Blog(url = "https://stanete.com/")
+    private val article: Article = Article(url, blog)
 
     @Test
     fun `When adding topic ads itself to topic's articles`() {
@@ -32,7 +34,7 @@ class ArticleTest {
 
     @Test
     fun `When adding recommendation ads itself to recommendation's articles`() {
-        val recommendedArticle = Article(url = "https://stanete.com/system-design-102")
+        val recommendedArticle = Article(url = "https://stanete.com/system-design-102", blog = blog)
 
         article.addRecommendation(recommendedArticle)
 

@@ -28,7 +28,7 @@ class AnalyseArticle(val analyser: TextRazor) {
             .distinctBy { it.wikiLink }
 
         Ok(
-            Article(article.url, article.content, language = language).apply {
+            Article(article.url, article.blog, article.content, language = language).apply {
                 topics.forEach { addTopic(Topic(it.label, it.wikiLink)) }
                 entities.forEach { addConcept(Concept(label = it.entityEnglishId, wikiLink = it.wikiLink)) }
             }

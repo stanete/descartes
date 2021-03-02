@@ -2,6 +2,8 @@ package com.descartes.actions
 
 import com.descartes.articles.Article
 import com.descartes.articles.ArticleRepository
+import com.descartes.blogs.Blog
+import com.descartes.blogs.BlogRepository
 import com.descartes.topics.Topic
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
@@ -16,15 +18,19 @@ import javax.transaction.Transactional
 class UpdateArticleTest {
 
     @Autowired
+    private lateinit var blogRepository: BlogRepository
+
+    @Autowired
     private lateinit var repository: ArticleRepository
     private val url = "https://stanete.com/system-design-101"
 
     @Test
     fun `When invoking updates article in repository with content and returns it`() {
-        repository.save(Article(url))
+        val blog = blogRepository.save(Blog(url = "https://stanete.com/"))
+        repository.save(Article(url, blog))
         val updateArticle = UpdateArticle(repository)
 
-        val articleToUpdate = Article(url, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
+        val articleToUpdate = Article(url, blog, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
         val updatedArticle = updateArticle(articleToUpdate)
 
         val expectedContent = "System Design 101 [...] on GitHub © 2021 David Stanete"
@@ -35,12 +41,13 @@ class UpdateArticleTest {
 
     @Test
     fun `When invoking updates article in repository with topics and returns it`() {
+        val blog = blogRepository.save(Blog(url = "https://stanete.com/"))
         val savedArticle = repository.save(
-            Article(url, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
+            Article(url, blog, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
         )
         val updateArticle = UpdateArticle(repository)
 
-        val articleToUpdate = Article(savedArticle.url, savedArticle.content)
+        val articleToUpdate = Article(savedArticle.url, savedArticle.blog, savedArticle.content)
         articleToUpdate.addTopic(Topic("System Design"))
         articleToUpdate.addTopic(Topic("Engineering"))
         val updatedArticle = updateArticle(articleToUpdate)

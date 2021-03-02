@@ -7,8 +7,10 @@ import com.descartes.actions.CreateArticle
 import com.descartes.actions.CreateRecommendations
 import com.descartes.actions.PublishMessage
 import com.descartes.actions.RetrieveArticle
+import com.descartes.actions.RetrieveBlog
 import com.descartes.actions.ScrapeArticle
 import com.descartes.actions.UpdateArticle
+import com.descartes.blogs.Blog
 import com.descartes.concepts.Concept
 import com.descartes.mqtp.Message
 import com.descartes.mqtp.Rabbitmq
@@ -26,6 +28,7 @@ import org.junit.jupiter.api.Test
 
 class ArticlePresenterTest {
 
+    private val retrieveBlog = mockk<RetrieveBlog>()
     private val publishMessage = mockk<PublishMessage>()
     private val createArticle = mockk<CreateArticle>()
     private val scrapeArticle = mockk<ScrapeArticle>()
@@ -35,29 +38,40 @@ class ArticlePresenterTest {
     private val createRecommendations = mockk<CreateRecommendations>()
 
     private val presenter = ArticlePresenter(
-        createArticle, publishMessage, scrapeArticle, updateArticle, getArticle, analyseArticle, createRecommendations
+        retrieveBlog,
+        createArticle,
+        publishMessage,
+        scrapeArticle,
+        updateArticle,
+        getArticle,
+        analyseArticle,
+        createRecommendations
     )
 
     @Test
     fun `When creating article publishes message with url to the correct queue`() = runBlocking<Unit> {
         val url = "https://stanete.com/system-design-101"
-        every { createArticle(url) } returns Article(url)
+        val blog = Blog(url = "https://stanete.com/")
+        every { retrieveBlog(url) } returns blog
+        every { createArticle(url, blog) } returns Article(url, blog)
         val message = Message(mapOf("url" to url))
         justRun { publishMessage(Rabbitmq.SCRAPE_ARTICLE, message) }
 
         val article = presenter.create(url)
 
-        verify { createArticle(url) }
+        verify { createArticle(url, blog) }
         verify { publishMessage(Rabbitmq.SCRAPE_ARTICLE, message = Message(mapOf("url" to url))) }
-        article shouldBeEqualTo Article(url)
+        article shouldBeEqualTo Article(url, blog)
     }
 
     @Test
     fun `When scraping article updates it with text`() {
         val url = "https://stanete.com/system-design-101"
         val content = "System Design 101 [...] on GitHub © 2021 David Stanete"
+        val blog = Blog(url = "https://stanete.com/")
+        every { retrieveBlog(url) } returns blog
         every { scrapeArticle(url) } returns content
-        val scrapedArticle = Article(url, content)
+        val scrapedArticle = Article(url, blog, content)
         every { updateArticle(scrapedArticle) } returns scrapedArticle
         val message = Message(mapOf("url" to url))
         justRun { publishMessage(Rabbitmq.ANALYSE_ARTICLE, message) }
@@ -75,11 +89,12 @@ class ArticlePresenterTest {
     fun `When analysing article updates it with topics and concepts`() {
         val url = "https://stanete.com/system-design-101"
         val content = "System Design 101 [...] on GitHub © 2021 David Stanete"
-        val article = Article(url, content)
+        val blog = Blog(url = "https://stanete.com/")
+        val article = Article(url, blog, content)
         every { getArticle(url) } returns Ok(article)
         val topics = mutableSetOf(Topic(label = "System Design"), Topic(label = "Engineering"))
         val concepts = mutableSetOf(Concept(label = "CDN"), Concept(label = "Load Balancer"))
-        val analysedArticle = Article(article.url, article.content).apply {
+        val analysedArticle = Article(article.url, article.blog, article.content).apply {
             topics.forEach { addTopic(it) }
             concepts.forEach { addConcept(it) }
         }
@@ -102,7 +117,7 @@ class ArticlePresenterTest {
     fun `When could not analyse article returns Err wrapping throwable`() {
         val url = "https://stanete.com/system-design-101"
         val content = "System Design 101 [...] on GitHub © 2021 David Stanete"
-        val article = Article(url, content)
+        val article = Article(url, Blog(url = "https://stanete.com/"), content)
         every { getArticle(url) } returns Ok(article)
         every { analyseArticle(article) } returns Err(ArticleNotAnalysed(url))
 
@@ -131,9 +146,10 @@ class ArticlePresenterTest {
     @Test
     fun `When creating recommendations for article updates it with recommended articles`() {
         val url = "https://stanete.com/system-design-101"
-        val article = Article(url, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
+        val blog = Blog(url = "https://stanete.com/")
+        val article = Article(url, blog, content = "System Design 101 [...] on GitHub © 2021 David Stanete")
         val articleWithRecommendations = article.copy().apply {
-            addRecommendation(Article(url = "https://stanete.com/system-design-102"))
+            addRecommendation(Article(url = "https://stanete.com/system-design-102", blog))
         }
         every { getArticle(url) } returns Ok(article)
         every { createRecommendations(article) } returns Ok(articleWithRecommendations)

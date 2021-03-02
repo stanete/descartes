@@ -1,0 +1,9 @@
+{
+  "status": 400,
+  "errors": [
+    {
+      "field": "url",
+      "message": "Url is not valid."
+    }
+  ]
+}
