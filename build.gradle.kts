@@ -31,7 +31,7 @@ repositories {
     }
 }
 
-val detektVersion = "1.15.0"
+val detektVersion = "1.16.0"
 val skrapeItVersion = "1.0.0-alpha8"
 val wiremockVersion = "3.0.1"
 val mockkVersion = "1.10.6"
