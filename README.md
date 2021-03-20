@@ -1,4 +1,5 @@
 # descartes 🕵️‍♂️
+![Test](https://github.com/stanete/descartes/actions/workflows/test.yml/badge.svg) ![Deploy](https://github.com/stanete/descartes/actions/workflows/main.yml/badge.svg) ![Healthcheck](https://github.com/stanete/descartes/actions/workflows/healthcheck.yml/badge.svg)
 
 Collaborative content discoverability network for independent writers.
 
