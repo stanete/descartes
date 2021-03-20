@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-PROJECT_NAME := 'Example API'
+PROJECT_NAME := 'Descartes'
 .DEFAULT_GOAL := help
 
 ANALYSER_APIKEY?="REPLACE_ME"
