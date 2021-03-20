@@ -33,7 +33,7 @@ repositories {
 
 val detektVersion = "1.16.0"
 val skrapeItVersion = "1.0.0-alpha8"
-val wiremockVersion = "3.0.1"
+val wiremockVersion = "3.0.2"
 val mockkVersion = "1.11.0"
 val kotlinResultVersion = "1.1.11"
 val kluentVersion = "1.65"
