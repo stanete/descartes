@@ -37,7 +37,7 @@ val wiremockVersion = "3.0.1"
 val mockkVersion = "1.11.0"
 val kotlinResultVersion = "1.1.11"
 val kluentVersion = "1.65"
-val textRazorVersion = "1.0.9"
+val textRazorVersion = "1.0.12"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
