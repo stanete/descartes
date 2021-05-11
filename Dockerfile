@@ -1,4 +1,4 @@
-FROM gradle:6.8.3 as builder
+FROM gradle:7.0.1 as builder
 USER root
 ENV APP_DIR /app
 WORKDIR $APP_DIR
