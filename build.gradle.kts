@@ -10,7 +10,7 @@ plugins {
     id("com.adarshr.test-logger") version "3.0.0"
     kotlin("jvm") version "1.4.32"
     kotlin("plugin.spring") version "1.4.32"
-    kotlin("plugin.jpa") version "1.4.32"
+    kotlin("plugin.jpa") version "1.5.10"
 }
 
 apply(plugin = "org.flywaydb.flyway")
